@@ -117,6 +117,126 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>The <code>echo: false</code> option disables the printing of code (only output is displayed).</p>
 </section>
+<section id="diseños-experimentales" class="level1">
+<h1>DISEÑOS EXPERIMENTALES</h1>
+<section id="dca" class="level2">
+<h2 class="anchored" data-anchor-id="dca">DCA</h2>
+<p>DOSIS DE FERTILIZACIÓN NITROGENADA:</p>
+<p>-0 -50 -100 -150</p>
+<p>Rep: 5</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar y cargar el paquete agricolae</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(agricolae)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fertilizacion <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"T1"</span>, <span class="st">"T2"</span>, <span class="st">"T3"</span>, <span class="st">"T4"</span>)  </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>repeticiones <span class="ot">&lt;-</span> <span class="dv">5</span>  </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear el diseño completamente al azar (DCA)</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>diseño_dca <span class="ot">&lt;-</span> <span class="fu">design.crd</span>(<span class="at">trt=</span>fertilizacion, <span class="at">r=</span>repeticiones, <span class="at">seed =</span> <span class="dv">123</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar la disposición del diseño experimental</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(diseño_dca<span class="sc">$</span>book)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   plots r fertilizacion
+1    101 1            T2
+2    102 1            T1
+3    103 2            T1
+4    104 2            T2
+5    105 3            T1
+6    106 4            T1
+7    107 1            T4
+8    108 1            T3
+9    109 3            T2
+10   110 2            T3
+11   111 3            T3
+12   112 4            T2
+13   113 4            T3
+14   114 2            T4
+15   115 3            T4
+16   116 5            T3
+17   117 4            T4
+18   118 5            T2
+19   119 5            T1
+20   120 5            T4</code></pre>
+</div>
+</div>
+</section>
+<section id="dbca" class="level2">
+<h2 class="anchored" data-anchor-id="dbca">DBCA</h2>
+<p>Factor =&gt; Fertilizacion: 0, 50, 100, 150 Factor =&gt; Variedades de papa: canchan y peruanita bloques: 5</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dosis <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">50</span>,<span class="dv">100</span>,<span class="dv">150</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>variedad <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"canchan"</span>, <span class="st">"peruanita"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(agricolae)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#factoral 4x2 con 5 bloques</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>trt<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">2</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>outdesign <span class="ot">&lt;-</span><span class="fu">design.ab</span>(trt, <span class="at">r=</span><span class="dv">5</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(outdesign)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 2
+ $ parameters:List of 8
+  ..$ design : chr "factorial"
+  ..$ trt    : chr [1:8] "1 1" "1 2" "2 1" "2 2" ...
+  ..$ r      : num 5
+  ..$ serie  : num 2
+  ..$ seed   : int -698361477
+  ..$ kinds  : chr "Super-Duper"
+  ..$        : logi TRUE
+  ..$ applied: chr "rcbd"
+ $ book      :'data.frame': 40 obs. of  4 variables:
+  ..$ plots: num [1:40] 101 102 103 104 105 106 107 108 109 110 ...
+  ..$ block: Factor w/ 5 levels "1","2","3","4",..: 1 1 1 1 1 1 1 1 2 2 ...
+  ..$ A    : chr [1:40] "4" "1" "1" "4" ...
+  ..$ B    : chr [1:40] "1" "1" "2" "2" ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>book<span class="ot">&lt;-</span>outdesign<span class="sc">$</span>book</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>book</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   plots block A B
+1    101     1 4 1
+2    102     1 1 1
+3    103     1 1 2
+4    104     1 4 2
+5    105     1 3 1
+6    106     1 2 1
+7    107     1 2 2
+8    108     1 3 2
+9    109     2 1 1
+10   110     2 1 2
+11   111     2 2 1
+12   112     2 2 2
+13   113     2 3 2
+14   114     2 3 1
+15   115     2 4 1
+16   116     2 4 2
+17   117     3 4 2
+18   118     3 1 1
+19   119     3 3 1
+20   120     3 3 2
+21   121     3 2 2
+22   122     3 1 2
+23   123     3 2 1
+24   124     3 4 1
+25   125     4 3 1
+26   126     4 1 1
+27   127     4 4 2
+28   128     4 2 1
+29   129     4 2 2
+30   130     4 3 2
+31   131     4 4 1
+32   132     4 1 2
+33   133     5 3 2
+34   134     5 2 1
+35   135     5 2 2
+36   136     5 1 2
+37   137     5 4 2
+38   138     5 4 1
+39   139     5 1 1
+40   140     5 3 1</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="analisis-de-datos" class="level1">
+<h1>ANALISIS DE DATOS</h1>
+</section>
 
 </main>
 <!-- /main column -->

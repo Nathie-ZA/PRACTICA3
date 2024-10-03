@@ -2,6 +2,8 @@
 title: "Quarto1"
 format: html
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
 
 ## Quarto
@@ -24,3 +26,50 @@ You can add options to executable code like this
 ```
 
 The `echo: false` option disables the printing of code (only output is displayed).
+
+# DISEÑOS EXPERIMENTALES
+
+## DCA
+
+DOSIS DE FERTILIZACIÓN NITROGENADA:
+
+-0
+-50
+-100
+-150
+
+Rep: 5
+```{r}
+# Instalar y cargar el paquete agricolae
+library(agricolae)
+fertilizacion <- c("T1", "T2", "T3", "T4")  
+repeticiones <- 5  
+# Crear el diseño completamente al azar (DCA)
+diseño_dca <- design.crd(trt=fertilizacion, r=repeticiones, seed = 123)
+# Mostrar la disposición del diseño experimental
+print(diseño_dca$book)
+
+```
+
+
+## DBCA
+
+Factor => Fertilizacion: 0, 50, 100, 150
+Factor => Variedades de papa: canchan y peruanita
+bloques: 5
+```{r}
+
+dosis <- c(0,50,100,150)
+variedad <- c("canchan", "peruanita")
+library(agricolae)
+#factoral 4x2 con 5 bloques
+trt<-c(4,2)
+outdesign <-design.ab(trt, r=5)
+str(outdesign)
+book<-outdesign$book
+book
+
+```
+
+
+# ANALISIS DE DATOS
