@@ -6,6 +6,8 @@ editor_options:
   chunk_output_type: console
 ---
 
+
+
 ## Quarto
 
 Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
@@ -14,16 +16,24 @@ Quarto enables you to weave together content and executable code into a finished
 
 When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
 
+
+
 ```{r}
 1 + 1
 ```
 
+
+
 You can add options to executable code like this
+
+
 
 ```{r}
 #| echo: false
 2 * 2
 ```
+
+
 
 The `echo: false` option disables the printing of code (only output is displayed).
 
@@ -39,6 +49,8 @@ DOSIS DE FERTILIZACIÓN NITROGENADA:
 -150
 
 Rep: 5
+
+
 ```{r}
 # Instalar y cargar el paquete agricolae
 library(agricolae)
@@ -52,11 +64,15 @@ print(diseño_dca$book)
 ```
 
 
+
+
 ## DBCA
 
 Factor => Fertilizacion: 0, 50, 100, 150
 Factor => Variedades de papa: canchan y peruanita
 bloques: 5
+
+
 ```{r}
 
 dosis <- c(0,50,100,150)
@@ -70,8 +86,12 @@ book<-outdesign$book
 book
 
 ```
+
+
 # ANALISIS DE DATOS
 #importar datos
+
+
 ```{r}
 library(readxl)
 fb2 <- read_excel("LA MOLINA 2014 POTATO WUE (FB) 2.xlsx", 
@@ -79,25 +99,41 @@ fb2 <- read_excel("LA MOLINA 2014 POTATO WUE (FB) 2.xlsx",
 View(fb2)
 
 ```
+
+
 #estrutura de datos
+
+
 ```{r}
 str(fb2)
 ```
+
+
 #modelo estadístico
 #y = u + riego + geno + riego x geno + bloque + error
 #en r, no se pone media ni error
 #ojo con block y bloque. block es numerico y bloque es caracter
+
+
 ```{r}
 modelo <- aov(formula = lfa ~ riego + geno + riego*geno + bloque, data = fb2)
 
 anova(modelo)
 
 ```
+
+
 #supuestos del modelo
+
+
 ```{r}
 plot(modelo)
 ```
+
+
 #comparación de medias
+
+
 ```{r}
 cm <- agricolae::duncan.test(y=modelo, trt =c("riego", "geno"), alpha=0.01, console=TRUE)
 
@@ -105,7 +141,11 @@ str(cm)
 plot(cm)
 
 ```
+
+
 #con el paquete emmeans
+
+
 ```{r}
 library(emmeans)
 library(multcomp)
@@ -115,19 +155,19 @@ cm <- emmeans(modelo, ~ riego | geno) %>% cld(Letters = letters, reversed = T)
 
 cm
 ```
+
+
 #Grafico
+
+
 ```{r}
 library(inti)
 
 plot_smr(data = cm, type = "bar", x = "geno", y = "emmean", group = "riego", sig =".group", error = "SE", ylimits = c(0, 12000, 2000))
 
 ```
+
 ```{r}
 ggplot(cm, aes(x = geno, y =emmean, fill = riego)) + geom_bar(stat = "identity") + theme_minimal() + labs(tittle ="Grafico de Barras", x = "Categoria", y = "valores")
 ```
-
-
-
-
-
 
